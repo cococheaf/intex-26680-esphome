@@ -12,3 +12,4 @@ All notable project changes should be documented here.
 - Added TM1650 button-matrix mapping documentation.
 - Consolidated the KiCad reference under `hardware/panel-interface-board`.
 - Kept separate protocol notes for 26670 and 26680 capture work.
+- Added English/German README entry points and German core documentation.

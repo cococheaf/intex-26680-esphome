@@ -1,5 +1,7 @@
 # Contributing to Intex ESPHome
 
+**English** | [Deutsch](CONTRIBUTING.de.md)
+
 Thank you for helping improve this project.
 
 This firmware observes and may later control real pool equipment through an
