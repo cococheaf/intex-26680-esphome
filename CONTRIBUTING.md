@@ -137,6 +137,9 @@ This repository does not currently contain a dedicated license file. Do not add
 third-party code unless its license is compatible with the future project
 license and the source is documented.
 
+When work is derived from or materially informed by another project, add or
+update attribution in [credits](docs/credits.md).
+
 ## Questions
 
 If you are unsure whether a change fits, open an issue first and describe the

@@ -148,3 +148,11 @@ docs/reference/                Reference documents and datasheets
 hardware/panel-interface-board/  KiCad panel interface board reference
 .github/social-preview.jpg     GitHub social preview image source
 ```
+
+## Credits
+
+This project builds on excellent prior Intex automation work by
+[`tonyflores1006/intex-swg-iot`](https://github.com/tonyflores1006/intex-swg-iot)
+and
+[`jingsno/intex-swg-pcb`](https://github.com/jingsno/intex-swg-pcb).
+See [credits](docs/credits.md) for details.
