@@ -1,0 +1,14 @@
+build/
+.esphome/
+.venv/
+managed_components/
+dependencies.lock
+sdkconfig.old
+*.bak
+*.bk
+*.tmp
+*.log
+.DS_Store
+*.code-workspace
+secrets.yaml
+__pycache__/
