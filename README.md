@@ -65,6 +65,10 @@ For TM1650-style panels, the next step is a continuity map from each physical
 button to the TM1650 matrix pins. The mapping workflow and keycode table are in
 [TM1650 button mapping](docs/protocol/tm1650-button-mapping.md).
 
+Current status can also be read from TM1650 display/LED writes once the bus is
+passively decoded. The capture plan is in
+[TM1650 status sniffing](docs/protocol/tm1650-status-sniffing.md).
+
 Non-TM1650 pulse-protocol material is kept as reference only:
 
 - [Intex 26670 pulse reference](docs/protocol/pulse-reference/intex-26670-pulse-protocol.md)

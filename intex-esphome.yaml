@@ -32,6 +32,18 @@ substitutions:
   keycode_boost: "unmapped"
   keycode_self_clean: "unmapped"
 
+  # Fill these after sniffing TM1650 display/status writes.
+  # The values will likely be TM1650 display RAM address/bit combinations.
+  # Keep "unmapped" until a known device state was captured and confirmed.
+  status_pump_active: "unmapped"
+  status_chlorinator_active: "unmapped"
+  status_boost_active: "unmapped"
+  status_sleep_active: "unmapped"
+  status_low_flow: "unmapped"
+  status_low_salt: "unmapped"
+  status_high_salt: "unmapped"
+  status_service: "unmapped"
+
 esphome:
   # Main ESPHome identity. `project` lets Home Assistant show a stable
   # project namespace/version for this firmware.
@@ -189,6 +201,73 @@ binary_sensor:
         input: true
         pullup: true
 
+  # Status placeholders for later TM1650 display/LED decoding.
+  # They stay disabled and always false until the sniffer publishes decoded
+  # status bits. This keeps the first firmware safe and honest.
+  - platform: template
+    name: Pump Active
+    id: pump_active
+    entity_category: diagnostic
+    disabled_by_default: true
+    lambda: |-
+      return false;
+
+  - platform: template
+    name: Chlorinator Active
+    id: chlorinator_active
+    entity_category: diagnostic
+    disabled_by_default: true
+    lambda: |-
+      return false;
+
+  - platform: template
+    name: Boost Active
+    id: boost_active
+    entity_category: diagnostic
+    disabled_by_default: true
+    lambda: |-
+      return false;
+
+  - platform: template
+    name: Sleep Active
+    id: sleep_active
+    entity_category: diagnostic
+    disabled_by_default: true
+    lambda: |-
+      return false;
+
+  - platform: template
+    name: Pump Low Flow
+    id: pump_low_flow
+    entity_category: diagnostic
+    disabled_by_default: true
+    lambda: |-
+      return false;
+
+  - platform: template
+    name: Low Salt
+    id: low_salt
+    entity_category: diagnostic
+    disabled_by_default: true
+    lambda: |-
+      return false;
+
+  - platform: template
+    name: High Salt
+    id: high_salt
+    entity_category: diagnostic
+    disabled_by_default: true
+    lambda: |-
+      return false;
+
+  - platform: template
+    name: Service
+    id: service_state
+    entity_category: diagnostic
+    disabled_by_default: true
+    lambda: |-
+      return false;
+
 # -------------------------------------------------------------------
 # Text Sensors
 # -------------------------------------------------------------------
@@ -242,6 +321,65 @@ text_sensor:
     entity_category: diagnostic
     lambda: |-
       return std::string("${keycode_self_clean}");
+
+  # Diagnostic echo of the status mappings that still need to be discovered.
+  - platform: template
+    name: Pump Active Mapping
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${status_pump_active}");
+
+  - platform: template
+    name: Chlorinator Active Mapping
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${status_chlorinator_active}");
+
+  - platform: template
+    name: Boost Active Mapping
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${status_boost_active}");
+
+  - platform: template
+    name: Sleep Active Mapping
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${status_sleep_active}");
+
+  - platform: template
+    name: Pump Low Flow Mapping
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${status_low_flow}");
+
+  - platform: template
+    name: Low Salt Mapping
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${status_low_salt}");
+
+  - platform: template
+    name: High Salt Mapping
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${status_high_salt}");
+
+  - platform: template
+    name: Service Mapping
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${status_service}");
+
+  # Future sniffer output placeholder. A local TM1650 sniffer component can
+  # publish the most recent decoded display write here once implemented.
+  - platform: template
+    name: TM1650 Last Status Frame
+    id: tm1650_last_status_frame
+    entity_category: diagnostic
+    disabled_by_default: true
+    lambda: |-
+      return std::string("sniffer-not-enabled");
 
   # IP address exposed as a diagnostic entity.
   - platform: wifi_info
