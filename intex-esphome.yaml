@@ -98,10 +98,10 @@ wifi:
   # Static network configuration for the local installation.
   # Change these values when the device moves to another subnet.
   manual_ip:
-    static_ip: 172.16.20.201
-    gateway: 172.16.20.1
-    subnet: 255.255.255.0
-    dns1: 172.16.20.1
+    static_ip: 1.2.3.4
+    gateway: 5.6.7.8
+    subnet: 9.10.11.12
+    dns1: 13.14.15.16
 
   # Fallback access point used when the device cannot join WiFi.
   # Credentials are secrets so they can differ per installation.
