@@ -102,3 +102,35 @@ expected states:
 They intentionally return `false` until a TM1650 sniffer component publishes
 decoded state. The mapping substitutions in the YAML should be filled only
 after captures confirm the real LED bits.
+
+## External Component
+
+The first passive sniffer lives in this repository under:
+
+```text
+components/tm1650_sniffer
+```
+
+`intex-esphome.yaml` loads it through ESPHome `external_components` from:
+
+```text
+https://github.com/cococheaf/intex-esphome
+```
+
+Current behavior:
+
+- input-only on the configured SCL/SDA pins
+- detects TM1650-style START and STOP conditions
+- samples SDA on SCL rising edges
+- groups data into bytes
+- logs raw frames as `TM1650 frame (...)`
+- does not drive the bus
+- does not publish decoded status yet
+
+Enable or disable raw logging with:
+
+```yaml
+substitutions:
+  tm1650_sniffer_enabled: "true"
+  tm1650_sniffer_log_raw: "true"
+```

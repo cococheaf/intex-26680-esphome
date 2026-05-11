@@ -44,6 +44,11 @@ substitutions:
   status_high_salt: "unmapped"
   status_service: "unmapped"
 
+  # Passive TM1650 frame logging. The component is loaded from this GitHub
+  # repository through ESPHome external_components below.
+  tm1650_sniffer_enabled: "true"
+  tm1650_sniffer_log_raw: "true"
+
 esphome:
   # Main ESPHome identity. `project` lets Home Assistant show a stable
   # project namespace/version for this firmware.
@@ -60,6 +65,23 @@ esp32:
   framework:
     # ESP-IDF is preferred here for a conservative ESPHome baseline.
     type: esp-idf
+    advanced:
+      sram1_as_iram: true
+
+# -------------------------------------------------------------------
+# External Components
+# -------------------------------------------------------------------
+external_components:
+  # Load the passive TM1650 sniffer from this repository. ESPHome will fetch
+  # the component from GitHub during compile/update, so installed devices can
+  # track the published repo instead of relying on local component files.
+  - source:
+      type: git
+      url: https://github.com/cococheaf/intex-esphome
+      ref: main
+    components:
+      - tm1650_sniffer
+    refresh: 1h
 
 # -------------------------------------------------------------------
 # WiFi
@@ -69,10 +91,8 @@ wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
 
-  # Require WPA2 or better and connect directly to the configured network.
-  # `fast_connect` is useful when the SSID is known and hidden-network scans
-  # are not needed.
-  min_auth_mode: WPA2
+  # Connect directly to the configured network. `fast_connect` is useful when
+  # the SSID is known and hidden-network scans are not needed.
   fast_connect: true
 
   # Static network configuration for the local installation.
@@ -150,6 +170,25 @@ time:
         - logger.log: "Synchronized SNTP clock"
 
 # -------------------------------------------------------------------
+# Passive TM1650 Sniffer
+# -------------------------------------------------------------------
+tm1650_sniffer:
+  # Log-only passive decoder. It observes SCL/SDA and prints raw frames.
+  # Keep the connected ESP32 pins input-only and protect them from 5 V levels.
+  enabled: ${tm1650_sniffer_enabled}
+  log_raw: ${tm1650_sniffer_log_raw}
+  scl_pin:
+    number: ${controller_clock_pin}
+    mode:
+      input: true
+      pullup: true
+  sda_pin:
+    number: ${controller_data_pin}
+    mode:
+      input: true
+      pullup: true
+
+# -------------------------------------------------------------------
 # Binary Sensors
 # -------------------------------------------------------------------
 binary_sensor:
@@ -157,27 +196,9 @@ binary_sensor:
   - platform: status
     name: Status
 
-  # Candidate TM1650 clock line observed from the original controller side.
-  - platform: gpio
-    name: Controller Clock Candidate
-    id: controller_clock_candidate
-    entity_category: diagnostic
-    pin:
-      number: ${controller_clock_pin}
-      mode:
-        input: true
-        pullup: true
-
-  # Candidate TM1650 data line observed from the original controller side.
-  - platform: gpio
-    name: Controller Data Candidate
-    id: controller_data_candidate
-    entity_category: diagnostic
-    pin:
-      number: ${controller_data_pin}
-      mode:
-        input: true
-        pullup: true
+  # The controller-side TM1650 SCL/SDA pins are owned by the tm1650_sniffer
+  # component above. Keeping them out of gpio binary_sensor avoids duplicate
+  # pin ownership and interrupt conflicts.
 
   # Candidate clock line on the panel/display side of the bridge.
   - platform: gpio

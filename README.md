@@ -56,8 +56,10 @@ The default YAML intentionally uses ESPHome-native components only. It exposes:
 - measured keycode placeholders
 - raw GPIO line-state diagnostics for four candidate bridge lines
 - disabled virtual button placeholders for later control work
+- a passive TM1650 sniffer loaded as an external component from this repository
 
-No external ESPHome components are required.
+The only external ESPHome component is `tm1650_sniffer`, loaded from this
+GitHub repository through `external_components`.
 
 ## Keycode Mapping
 
