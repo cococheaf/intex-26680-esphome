@@ -12,8 +12,9 @@ connector, enclosure and signal levels of the target controller.
 - `docs/panel-interface-board.pdf` contains the schematic export.
 - `docs/schematic.png` contains a schematic preview.
 - `docs/poster.png` contains a board preview.
-- `protocol/` contains pulse-protocol reference notes and Arduino capture demos
-  from the reference board.
+
+Non-TM1650 reference material and Arduino capture demos live in
+`docs/protocol/pulse-reference`.
 
 ## Parts List
 

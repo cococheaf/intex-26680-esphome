@@ -50,7 +50,7 @@ Expected signs:
 - pulse-width encoded traffic for display/status and button states
 
 For this variant, use the capture checklist in
-`docs/protocol/intex-26680-pulse-protocol.md`.
+`docs/protocol/pulse-reference/intex-26680-pulse-protocol.md`.
 
 ## Bring-Up Decision Tree
 

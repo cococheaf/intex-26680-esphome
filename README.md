@@ -19,7 +19,7 @@ Open tasks:
 
 - measure the panel connector voltage levels
 - confirm connector pinout and signal direction
-- identify whether the target panel is TM1650-style or pulse-protocol
+- confirm TM1650 SCL/SDA/VDD/GND wiring on the target panel
 - capture real traffic with a logic analyzer
 - map the button keycodes for the selected model
 - map display and status LED frames
@@ -65,10 +65,11 @@ For TM1650-style panels, the next step is a continuity map from each physical
 button to the TM1650 matrix pins. The mapping workflow and keycode table are in
 [TM1650 button mapping](docs/protocol/tm1650-button-mapping.md).
 
-For pulse-protocol panels, use the capture notes in:
+Non-TM1650 pulse-protocol material is kept as reference only:
 
-- [Intex 26670 pulse protocol candidate](docs/protocol/intex-26670-pulse-protocol.md)
-- [Intex 26680 pulse protocol candidate](docs/protocol/intex-26680-pulse-protocol.md)
+- [Intex 26670 pulse reference](docs/protocol/pulse-reference/intex-26670-pulse-protocol.md)
+- [Intex 26680 pulse reference](docs/protocol/pulse-reference/intex-26680-pulse-protocol.md)
+- [Reference Arduino demos](docs/protocol/pulse-reference/reference-arduino-demos/README.md)
 
 The 26680-specific panel variant notes are in
 [Intex 26680 panel variants](docs/protocol/intex-26680-panel-variants.md).
@@ -142,6 +143,7 @@ secrets.yaml.example           Example local WiFi secrets
 docs/hardware/                 Hardware bring-up notes
 docs/images/                   Project images
 docs/protocol/                 Protocol notes and capture plans
+docs/protocol/pulse-reference/ Non-TM1650 reference material
 docs/reference/                Reference documents and datasheets
 hardware/panel-interface-board/  KiCad panel interface board reference
 .github/social-preview.jpg     GitHub social preview image source
