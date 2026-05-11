@@ -1,14 +1,26 @@
-build/
+# Local ESPHome configuration
+secrets.yaml
+
+# ESPHome / PlatformIO build output
 .esphome/
-.venv/
+.pioenvs/
+.piolibdeps/
+build/
 managed_components/
 dependencies.lock
-sdkconfig.old
-*.bak
-*.bk
-*.tmp
-*.log
+sdkconfig
+sdkconfig.*
+
+# Python environments and caches
+.venv/
+__pycache__/
+
+# Editor and OS files
 .DS_Store
 *.code-workspace
-secrets.yaml
-__pycache__/
+
+# Temporary files
+*.bak
+*.bk
+*.log
+*.tmp
