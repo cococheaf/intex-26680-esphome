@@ -156,3 +156,8 @@ This project builds on excellent prior Intex automation work by
 and
 [`jingsno/intex-swg-pcb`](https://github.com/jingsno/intex-swg-pcb).
 See [credits](docs/credits.md) for details.
+
+## License
+
+This project is licensed under the GNU General Public License v3.0. See
+[LICENSE](LICENSE).

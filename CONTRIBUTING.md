@@ -133,9 +133,9 @@ Describe what you tested in the pull request.
 
 ## License
 
-This repository does not currently contain a dedicated license file. Do not add
-third-party code unless its license is compatible with the future project
-license and the source is documented.
+This repository is licensed under the GNU General Public License v3.0. Do not
+add third-party code unless its license is compatible with GPL-3.0 and the
+source is documented.
 
 When work is derived from or materially informed by another project, add or
 update attribution in [credits](docs/credits.md).
