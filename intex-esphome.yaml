@@ -65,8 +65,6 @@ esp32:
   framework:
     # ESP-IDF is preferred here for a conservative ESPHome baseline.
     type: esp-idf
-    advanced:
-      sram1_as_iram: true
 
 # -------------------------------------------------------------------
 # External Components
