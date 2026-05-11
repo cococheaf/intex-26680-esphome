@@ -1,16 +1,29 @@
+# -------------------------------------------------------------------
+# Intex ESPHome all-in-one firmware
+#
+# This YAML intentionally starts in passive/diagnostic mode. It exposes
+# GPIO line states, model metadata and future button placeholders, but it
+# does not inject button presses until the real TM1650 keycodes are mapped.
+# -------------------------------------------------------------------
+
 substitutions:
-  # Supported values: 26670, 26680.
+  # Supported target models: 26670, 26680.
+  # This currently affects naming and diagnostic metadata only.
   target_model: "26680"
+
+  # ESPHome node name and friendly display name shown in Home Assistant.
   device_name: intex-esphome
   friendly_name: "Intex ${target_model} ESPHome"
 
   # Four-line ESP32 bridge reference used for TM1650-style panels.
+  # Confirm the real wiring before using these lines for active control.
   controller_clock_pin: GPIO19
   controller_data_pin: GPIO18
   panel_clock_pin: GPIO17
   panel_data_pin: GPIO16
 
-  # Fill these after measuring the keypad matrix.
+  # Fill these after measuring the TM1650 keypad matrix.
+  # Keep "unmapped" for buttons that do not exist on the selected model.
   keycode_power: "unmapped"
   keycode_pump: "unmapped"
   keycode_lock_unlock: "unmapped"
@@ -20,6 +33,8 @@ substitutions:
   keycode_self_clean: "unmapped"
 
 esphome:
+  # Main ESPHome identity. `project` lets Home Assistant show a stable
+  # project namespace/version for this firmware.
   name: ${device_name}
   friendly_name: ${friendly_name}
   project:
@@ -27,34 +42,110 @@ esphome:
     version: "0.3.0"
 
 esp32:
+  # Generic ESP32 DevKit target. Adjust this if the final PCB uses a
+  # different ESP32 module/board definition.
   board: esp32dev
   framework:
+    # ESP-IDF is preferred here for a conservative ESPHome baseline.
     type: esp-idf
 
-logger:
-  level: INFO
-
-api:
-
-ota:
-  - platform: esphome
-
+# -------------------------------------------------------------------
+# WiFi
+# -------------------------------------------------------------------
 wifi:
+  # Main WiFi credentials are kept in the ignored local secrets.yaml.
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  ap:
-    ssid: "${friendly_name} Setup"
-    password: !secret fallback_ap_password
 
+  # Require WPA2 or better and connect directly to the configured network.
+  # `fast_connect` is useful when the SSID is known and hidden-network scans
+  # are not needed.
+  min_auth_mode: WPA2
+  fast_connect: true
+
+  # Static network configuration for the local installation.
+  # Change these values when the device moves to another subnet.
+  manual_ip:
+    static_ip: 172.16.20.201
+    gateway: 172.16.20.1
+    subnet: 255.255.255.0
+    dns1: 172.16.20.1
+
+  # Fallback access point used when the device cannot join WiFi.
+  # Credentials are secrets so they can differ per installation.
+  ap:
+    ssid: !secret fallback_ssid
+    password: !secret fallback_password
+
+# Allows local WiFi provisioning through the fallback AP.
 captive_portal:
 
-web_server:
-  port: 80
+# -------------------------------------------------------------------
+# Logging
+# -------------------------------------------------------------------
+logger:
+  # INFO keeps normal logs readable. Increase to DEBUG only while capturing
+  # protocol behavior or debugging ESPHome startup.
+  level: INFO
 
+# -------------------------------------------------------------------
+# Home Assistant API
+# -------------------------------------------------------------------
+api:
+  # Encrypted native API connection for Home Assistant.
+  encryption:
+    key: !secret api_encryption_key
+
+  # Explicit API id/port. Reboot timeout is disabled so the device keeps
+  # running diagnostics even if Home Assistant is offline.
+  id: espapiwm
+  port: 6053
+  reboot_timeout: 0s
+
+# -------------------------------------------------------------------
+# Local Web Server
+# -------------------------------------------------------------------
+web_server:
+  # Local web UI for diagnostics and optional browser-based OTA uploads.
+  port: 80
+  version: 2
+  local: true
+
+# -------------------------------------------------------------------
+# OTA Updates
+# -------------------------------------------------------------------
+ota:
+  # Standard ESPHome OTA, protected by a local secret.
+  - platform: esphome
+    password: !secret ota_password
+
+  # Enables firmware uploads through the local web server.
+  - platform: web_server
+
+# -------------------------------------------------------------------
+# Time
+# -------------------------------------------------------------------
+time:
+  - platform: sntp
+    id: sntp_time
+    timezone: Europe/Berlin
+    servers:
+      - 0.at.pool.ntp.org
+      - 0.pool.ntp.org
+      - 1.pool.ntp.org
+    on_time_sync:
+      then:
+        - logger.log: "Synchronized SNTP clock"
+
+# -------------------------------------------------------------------
+# Binary Sensors
+# -------------------------------------------------------------------
 binary_sensor:
+  # ESPHome node connectivity status.
   - platform: status
     name: Status
 
+  # Candidate TM1650 clock line observed from the original controller side.
   - platform: gpio
     name: Controller Clock Candidate
     id: controller_clock_candidate
@@ -65,6 +156,7 @@ binary_sensor:
         input: true
         pullup: true
 
+  # Candidate TM1650 data line observed from the original controller side.
   - platform: gpio
     name: Controller Data Candidate
     id: controller_data_candidate
@@ -75,6 +167,7 @@ binary_sensor:
         input: true
         pullup: true
 
+  # Candidate clock line on the panel/display side of the bridge.
   - platform: gpio
     name: Panel Clock Candidate
     id: panel_clock_candidate
@@ -85,6 +178,7 @@ binary_sensor:
         input: true
         pullup: true
 
+  # Candidate data line on the panel/display side of the bridge.
   - platform: gpio
     name: Panel Data Candidate
     id: panel_data_candidate
@@ -95,13 +189,18 @@ binary_sensor:
         input: true
         pullup: true
 
+# -------------------------------------------------------------------
+# Text Sensors
+# -------------------------------------------------------------------
 text_sensor:
+  # Shows which model this firmware instance is configured for.
   - platform: template
     name: Target Model
     entity_category: diagnostic
     lambda: |-
       return std::string("${target_model}");
 
+  # Diagnostic echo of the currently configured keycode placeholders.
   - platform: template
     name: Power Keycode
     entity_category: diagnostic
@@ -144,16 +243,23 @@ text_sensor:
     lambda: |-
       return std::string("${keycode_self_clean}");
 
+  # IP address exposed as a diagnostic entity.
   - platform: wifi_info
     ip_address:
       name: IP Address
       entity_category: diagnostic
 
+# -------------------------------------------------------------------
+# Buttons
+# -------------------------------------------------------------------
 button:
+  # Local restart command for maintenance.
   - platform: restart
     name: Restart
     entity_category: diagnostic
 
+  # Virtual buttons are intentionally disabled. They become useful only after
+  # TM1650 keycodes are measured and active injection logic is implemented.
   - platform: template
     name: Virtual Power
     disabled_by_default: true
@@ -196,7 +302,12 @@ button:
     on_press:
       - logger.log: "Virtual Self Clean is not active until the keycode mapping is implemented."
 
+# -------------------------------------------------------------------
+# Numeric Sensors
+# -------------------------------------------------------------------
 sensor:
+  # WiFi RSSI and uptime are useful while tuning enclosure placement and OTA
+  # reliability around pool equipment.
   - platform: wifi_signal
     name: WiFi Signal
     entity_category: diagnostic
