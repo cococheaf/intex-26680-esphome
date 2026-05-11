@@ -47,7 +47,7 @@ added.
 
 ## Default ESPHome Firmware
 
-The default YAML intentionally uses ESPHome-native components only. It exposes:
+The default YAML requires ESPHome 2026.4.0 or newer and exposes:
 
 - WiFi, API, OTA, captive portal and web server
 - device status
@@ -57,6 +57,7 @@ The default YAML intentionally uses ESPHome-native components only. It exposes:
 - raw GPIO line-state diagnostics for four candidate bridge lines
 - disabled virtual button placeholders for later control work
 - a passive TM1650 sniffer loaded as an external component from this repository
+- ESP32 SRAM1-as-IRAM support on classic ESP32 targets
 
 The only external ESPHome component is `tm1650_sniffer`, loaded from this
 GitHub repository through `external_components`.

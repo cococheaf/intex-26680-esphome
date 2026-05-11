@@ -56,6 +56,8 @@ esphome:
   # project namespace/version for this firmware.
   name: ${device_name}
   friendly_name: ${friendly_name}
+  # Required for esp32.framework.advanced.sram1_as_iram.
+  min_version: "2026.4.0"
   project:
     name: cococheaf.intex-esphome
     version: "0.3.0"
@@ -67,6 +69,10 @@ esp32:
   framework:
     # ESP-IDF is preferred here for a conservative ESPHome baseline.
     type: esp-idf
+    advanced:
+      # ESPHome 2026.4+ can reclaim the original ESP32 SRAM1 region as IRAM.
+      # This option is only valid on classic ESP32 targets such as esp32dev.
+      sram1_as_iram: true
 
 # -------------------------------------------------------------------
 # External Components
