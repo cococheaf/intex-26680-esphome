@@ -119,6 +119,7 @@ https://github.com/cococheaf/intex-esphome
 
 Current behavior:
 
+- runs continuously while `tm1650_sniffer_enabled` is `true`
 - input-only on the configured SCL/SDA pins
 - detects TM1650-style START and STOP conditions
 - samples SDA on SCL rising edges
@@ -127,10 +128,18 @@ Current behavior:
 - does not drive the bus
 - does not publish decoded status yet
 
-Enable or disable raw logging with:
+Runtime controls:
 
 ```yaml
 substitutions:
+  # Fully enable or disable the passive sniffer.
   tm1650_sniffer_enabled: "true"
+
+  # Keep sniffing enabled, but enable or disable raw frame log output.
   tm1650_sniffer_log_raw: "true"
 ```
+
+With `tm1650_sniffer_enabled: "true"` the sniffer is active from boot and keeps
+listening as long as the ESP32 is running. It does not need a separate scan
+command in YAML. Set `tm1650_sniffer_log_raw` to `false` if the bus is noisy and
+the raw frame log becomes too chatty during normal operation.

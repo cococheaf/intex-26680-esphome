@@ -44,7 +44,9 @@ substitutions:
   status_high_salt: "unmapped"
   status_service: "unmapped"
 
-  # Passive TM1650 frame logging. The component is loaded from this GitHub
+  # Passive TM1650 frame logging. When enabled, the sniffer starts at boot and
+  # keeps listening continuously; log_raw only controls whether raw frames are
+  # printed to the ESPHome log. The component is loaded from this GitHub
   # repository through ESPHome external_components below.
   tm1650_sniffer_enabled: "true"
   tm1650_sniffer_log_raw: "true"
