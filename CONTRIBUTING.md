@@ -1,18 +1,19 @@
-# Contributing to Intex 26670 ESPHome
+# Contributing to Intex ESPHome
 
 Thank you for helping improve this project.
 
-This firmware controls and observes real pool equipment through an ESP32. Good
-contributions are careful, practical and easy to verify on hardware.
+This firmware observes and may later control real pool equipment through an
+ESP32. Good contributions are careful, practical and easy to verify on
+hardware.
 
 ## Project Goals
 
 The project aims to:
 
-- understand the Intex 26670 display/keypad bus
+- understand the Intex 26670 and Intex 26680 display/keypad bus variants
 - provide reliable ESP32-based state reading
-- support safe virtual button injection
-- expose a small API for Home Assistant and OpenPool integration
+- support safe virtual button injection after mappings are verified
+- expose useful ESPHome entities for Home Assistant
 - keep the firmware understandable and maintainable
 - document hardware findings clearly enough that others can reproduce them
 
@@ -20,14 +21,13 @@ The project aims to:
 
 Useful contributions include:
 
-- bus captures from the Intex 26670
-- verified button-code mappings
+- bus captures from Intex 26670 or Intex 26680 hardware
+- verified TM1650 button matrix mappings
+- verified pulse-protocol button mappings
 - verified LED/status mappings
 - documentation improvements
-- build-system fixes
 - ESPHome compatibility updates
 - safer GPIO and relay handling
-- API improvements
 - bug fixes and test reports
 
 Small focused pull requests are preferred over large mixed changes.
@@ -108,18 +108,19 @@ When in doubt, prefer read-only diagnostics over control behavior.
 Use clear commit messages. Examples:
 
 ```text
-docs: document 26670 keypad mapping workflow
+docs: document 26680 keypad mapping workflow
 fix: release SDA after virtual key response
-feat: expose raw bus frames in debug endpoint
+feat: expose raw bus frames as diagnostics
 refactor: name TM1650 command constants
-build: repair wifi manager submodule
+build: update ESPHome validation
 ```
 
 ## Testing
 
 Depending on the change, useful testing includes:
 
-- `esphome compile intex-26670-esphome.yaml`
+- `esphome config intex-esphome.yaml`
+- `esphome compile intex-esphome.yaml`
 - flashing to an ESP32 test board
 - checking serial monitor output
 - checking the ESPHome API entities in Home Assistant

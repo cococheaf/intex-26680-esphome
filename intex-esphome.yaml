@@ -1,0 +1,207 @@
+substitutions:
+  # Supported values: 26670, 26680.
+  target_model: "26680"
+  device_name: intex-esphome
+  friendly_name: "Intex ${target_model} ESPHome"
+
+  # Four-line ESP32 bridge reference used for TM1650-style panels.
+  controller_clock_pin: GPIO19
+  controller_data_pin: GPIO18
+  panel_clock_pin: GPIO17
+  panel_data_pin: GPIO16
+
+  # Fill these after measuring the keypad matrix.
+  keycode_power: "unmapped"
+  keycode_pump: "unmapped"
+  keycode_lock_unlock: "unmapped"
+  keycode_chlorinator: "unmapped"
+  keycode_timer: "unmapped"
+  keycode_boost: "unmapped"
+  keycode_self_clean: "unmapped"
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${friendly_name}
+  project:
+    name: cococheaf.intex-esphome
+    version: "0.3.0"
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+  level: INFO
+
+api:
+
+ota:
+  - platform: esphome
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "${friendly_name} Setup"
+    password: !secret fallback_ap_password
+
+captive_portal:
+
+web_server:
+  port: 80
+
+binary_sensor:
+  - platform: status
+    name: Status
+
+  - platform: gpio
+    name: Controller Clock Candidate
+    id: controller_clock_candidate
+    entity_category: diagnostic
+    pin:
+      number: ${controller_clock_pin}
+      mode:
+        input: true
+        pullup: true
+
+  - platform: gpio
+    name: Controller Data Candidate
+    id: controller_data_candidate
+    entity_category: diagnostic
+    pin:
+      number: ${controller_data_pin}
+      mode:
+        input: true
+        pullup: true
+
+  - platform: gpio
+    name: Panel Clock Candidate
+    id: panel_clock_candidate
+    entity_category: diagnostic
+    pin:
+      number: ${panel_clock_pin}
+      mode:
+        input: true
+        pullup: true
+
+  - platform: gpio
+    name: Panel Data Candidate
+    id: panel_data_candidate
+    entity_category: diagnostic
+    pin:
+      number: ${panel_data_pin}
+      mode:
+        input: true
+        pullup: true
+
+text_sensor:
+  - platform: template
+    name: Target Model
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${target_model}");
+
+  - platform: template
+    name: Power Keycode
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${keycode_power}");
+
+  - platform: template
+    name: Pump Keycode
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${keycode_pump}");
+
+  - platform: template
+    name: Lock Unlock Keycode
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${keycode_lock_unlock}");
+
+  - platform: template
+    name: Chlorinator Keycode
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${keycode_chlorinator}");
+
+  - platform: template
+    name: Timer Keycode
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${keycode_timer}");
+
+  - platform: template
+    name: Boost Keycode
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${keycode_boost}");
+
+  - platform: template
+    name: Self Clean Keycode
+    entity_category: diagnostic
+    lambda: |-
+      return std::string("${keycode_self_clean}");
+
+  - platform: wifi_info
+    ip_address:
+      name: IP Address
+      entity_category: diagnostic
+
+button:
+  - platform: restart
+    name: Restart
+    entity_category: diagnostic
+
+  - platform: template
+    name: Virtual Power
+    disabled_by_default: true
+    on_press:
+      - logger.log: "Virtual Power is not active until the keycode mapping is implemented."
+
+  - platform: template
+    name: Virtual Pump
+    disabled_by_default: true
+    on_press:
+      - logger.log: "Virtual Pump is not active until the keycode mapping is implemented."
+
+  - platform: template
+    name: Virtual Lock Unlock
+    disabled_by_default: true
+    on_press:
+      - logger.log: "Virtual Lock Unlock is not active until the keycode mapping is implemented."
+
+  - platform: template
+    name: Virtual Chlorinator
+    disabled_by_default: true
+    on_press:
+      - logger.log: "Virtual Chlorinator is not active until the keycode mapping is implemented."
+
+  - platform: template
+    name: Virtual Timer
+    disabled_by_default: true
+    on_press:
+      - logger.log: "Virtual Timer is not active until the keycode mapping is implemented."
+
+  - platform: template
+    name: Virtual Boost
+    disabled_by_default: true
+    on_press:
+      - logger.log: "Virtual Boost is not active until the keycode mapping is implemented."
+
+  - platform: template
+    name: Virtual Self Clean
+    disabled_by_default: true
+    on_press:
+      - logger.log: "Virtual Self Clean is not active until the keycode mapping is implemented."
+
+sensor:
+  - platform: wifi_signal
+    name: WiFi Signal
+    entity_category: diagnostic
+    update_interval: 60s
+
+  - platform: uptime
+    name: Uptime
+    entity_category: diagnostic

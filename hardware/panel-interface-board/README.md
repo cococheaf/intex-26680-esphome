@@ -1,14 +1,15 @@
-# Intex 26670 Panel Board
+# Intex Panel Interface Board
 
-KiCad reference files for the Intex 26670 ESP32 panel interface board.
+KiCad reference files for a shared Intex 26670/26680 ESP32 panel interface
+board.
 
 This hardware is a starting point and still needs adaptation for the exact
-26670 connector, enclosure and signal levels.
+connector, enclosure and signal levels of the target controller.
 
 ## Files
 
 - `pcb/` contains the KiCad project and board files.
-- `docs/intex-26670-panel-board.pdf` contains the schematic export.
+- `docs/panel-interface-board.pdf` contains the schematic export.
 - `docs/schematic.png` contains a schematic preview.
 - `docs/poster.png` contains a board preview.
 - `protocol/` contains pulse-protocol reference notes and Arduino capture demos

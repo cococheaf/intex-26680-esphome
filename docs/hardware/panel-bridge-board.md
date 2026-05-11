@@ -1,16 +1,17 @@
 # Panel Bridge Board Notes
 
-This branch targets a panel interface board for the Intex 26670.
+This project targets an ESP32 panel interface board for Intex 26670 and Intex
+26680 controllers.
 
-The board should sit between the original 26670 controller board and the
-original 26670 display/keypad board. The first revision should be transparent:
-it should let the original signals pass while making those signals available to
-an ESP32 for measurement and later decoding.
+The board should sit between the original controller board and the original
+display/keypad board. The first revision should be transparent: it should let
+the original signals pass while making those signals available to an ESP32 for
+measurement and later decoding.
 
 ## Target Topology
 
 ```text
-Original 26670 controller board <-> ESP32 interface board <-> Original 26670 display/keypad board
+Original controller board <-> ESP32 interface board <-> Original display/keypad board
 ```
 
 The ESP32 side should eventually be able to:
@@ -27,24 +28,19 @@ The current board reference uses four low-voltage logic paths:
 
 | Direction | Working name | ESP32 GPIO in reference | Purpose |
 | --- | --- | ---: | --- |
-| Controller board -> ESP32 | `FROM_CONTROLLER` | 18 | Receive display/status data |
-| ESP32 -> Display board | `TO_PANEL` | 16 | Forward display/status data |
-| Display board -> ESP32 | `FROM_PANEL` | 17 | Receive keypad data |
-| ESP32 -> Controller board | `TO_CONTROLLER` | 19 | Forward keypad data |
+| Controller board -> ESP32 | `CONTROLLER_CLOCK` | 19 | Candidate TM1650 clock from controller side |
+| Controller board -> ESP32 | `CONTROLLER_DATA` | 18 | Candidate TM1650 data from controller side |
+| Display board -> ESP32 | `PANEL_CLOCK` | 17 | Candidate forwarded/display-side clock |
+| Display board -> ESP32 | `PANEL_DATA` | 16 | Candidate forwarded/display-side data |
 
-The default ESPHome YAML currently exposes only the two receive-side line states
-for safe bring-up:
-
-| Diagnostic entity | ESP32 GPIO |
-| --- | ---: |
-| Controller To Panel Line | 18 |
-| Panel To Controller Line | 17 |
+For pulse-protocol panels, only two of these lines may be meaningful. Confirm
+the real signal roles with a continuity check and logic capture.
 
 ## Electrical Design Checks
 
 Before a permanent board:
 
-- measure the 26670 panel connector voltage levels
+- measure the panel connector voltage levels
 - confirm idle levels and pull-up locations
 - confirm whether either side actively drives high
 - decide whether level shifters, series resistors or digital isolators are
@@ -54,8 +50,8 @@ Before a permanent board:
 
 ## KiCad Reference
 
-The license-free KiCad reference lives under:
+The KiCad reference lives under:
 
-- `hardware/intex-26670-panel-board`
+- `hardware/panel-interface-board`
 
-It is the starting point for the 26670-specific PCB adaptation.
+It is the starting point for a shared 26670/26680 PCB adaptation.

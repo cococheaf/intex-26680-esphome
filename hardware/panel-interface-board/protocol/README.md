@@ -1,10 +1,11 @@
-# Intex 26670 Pulse Protocol Notes
+# Intex Pulse Protocol Reference Notes
 
 Some related Intex panels do not contain the TM1650 LED driver chip.
 This document captures the pulse protocol used by the reference board.
 
-Known models without the TM1650 chip:
-* Intex Krystal Clear salt water system?? ECO 6220 / CG-26670 (7-led/5 buttons), Max 56800 Liters
+Known related model without the TM1650 chip:
+
+- Intex CG-26670 style panel with seven LEDs and five buttons
 
 ## General signal information
 
@@ -78,7 +79,7 @@ When the buttons are released the display board transmits
 1111 1111 0000 0000
 ~~~
 
-On the CG-26670 model, the buttons coresponds to:
+On the measured CG-26670 style panel, the buttons correspond to:
 
 N = Boost
 S = Self-Clean

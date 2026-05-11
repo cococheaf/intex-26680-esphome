@@ -39,9 +39,9 @@
 #define DISP_DP     0b10000000
 #define DISP_A      0b01110111
 #define DISP_P      0b01110011
-#define DISP_1_CLEAN_06P 0b11111101 // Right Disp, My Intex 26670 does not show "." in right display when in clean mode
-#define DISP_1_CLEAN_10P 0b10111111 // Right Disp, My Intex 26670 does not show "." in right display when in clean mode
-#define DISP_1_CLEAN_14P 0b11100110 // Right Disp, My Intex 26670 does not show "." in right display when in clean mode
+#define DISP_1_CLEAN_06P 0b11111101 // Right Disp, My Intex 26680 does not show "." in right display when in clean mode
+#define DISP_1_CLEAN_10P 0b10111111 // Right Disp, My Intex 26680 does not show "." in right display when in clean mode
+#define DISP_1_CLEAN_14P 0b11100110 // Right Disp, My Intex 26680 does not show "." in right display when in clean mode
 
 // Define pulse lengts
 const unsigned long bit1_MIN = 800;

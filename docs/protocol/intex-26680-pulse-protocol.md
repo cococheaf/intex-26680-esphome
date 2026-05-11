@@ -1,7 +1,7 @@
-# Intex 26670 Pulse Protocol Candidate
+# Intex 26680 Pulse Protocol Candidate
 
 Some related Intex control panels use a one-wire pulse protocol between the
-controller board and the display/keypad board. The 26670 still needs to be
+controller board and the display/keypad board. The 26680 still needs to be
 measured, so this document is a candidate protocol and capture checklist, not a
 confirmed specification.
 
@@ -25,7 +25,7 @@ Known related panels idle high and encode data as pulse widths.
 | `1` bit | high pulse around 800 us, then low spacer around 200 us |
 | End | return to idle high |
 
-The first 26670 capture should verify whether these timings match.
+The first 26680 capture should verify whether these timings match.
 
 ## Candidate Button Frames
 
@@ -43,7 +43,8 @@ Candidate values from related hardware:
 | Self-clean | `0x08` |
 | Boost | `0x10` |
 
-The 26670 button values still need to be confirmed on the exact target panel.
+The 26680 has Pump and Chlorinator buttons, so the real 26680 button values
+must be captured.
 
 ## Candidate Display Frames
 
@@ -72,8 +73,8 @@ Candidate LED bits from related hardware:
 | Sleep | `0x1000` |
 | Boost | `0x8000` |
 
-The 26670 status LED bit positions still need to be measured on the exact
-target panel.
+The 26680 front panel has separate Pump and Chlorinator LEDs. Their bit
+positions still need to be measured.
 
 ## Capture Plan
 
@@ -82,7 +83,8 @@ Capture these events on a powered low-voltage panel connection:
 - power-up sequence
 - no button pressed
 - each physical button pressed and released
-- working/output active
+- pump active
+- chlorinator active
 - boost active
 - self-clean active
 - simulated low-flow/salt/service states if safely reproducible

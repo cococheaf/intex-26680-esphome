@@ -4,7 +4,7 @@ EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
-Title "Intex 26670 with jumpers"
+Title "Intex panel interface board"
 Date "2022-06-06"
 Rev "3.1"
 Comp ""
